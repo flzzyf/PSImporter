@@ -29,7 +29,7 @@ public class PsbImporter : ScriptedImporter
         string name = GetFileName(ctx.assetPath);
         go = new GameObject(name);
 
-        ctx.AddObjectToAsset("Main obj", go);
+        ctx.AddObjectToAsset(name, go);
         ctx.SetMainObject(go);
 
         this.ctx = ctx;
@@ -60,8 +60,6 @@ public class PsbImporter : ScriptedImporter
     void CreateTextures()
     {
         CreateLayers(psd.Childs, go.transform);
-
-
     }
 
     //输入PSD图层来创建图层
@@ -90,9 +88,10 @@ public class PsbImporter : ScriptedImporter
                     Texture2D tex = GetTexture2D(layer);
                     tex.name = layer.Name;
                     sprite = Sprite.Create(tex, new Rect(0, 0, layer.Width, layer.Height), new Vector2(.5f, .5f), pixelsPerUnit);
+                    sprite.name = layer.Name;
 
-                    ctx.AddObjectToAsset("tex", tex);
-                    ctx.AddObjectToAsset("sprite", sprite);
+                    ctx.AddObjectToAsset("tex_" + tex.name, tex);
+                    ctx.AddObjectToAsset("sprite_" + sprite.name, sprite);
                 }
 
                 //设置贴图
@@ -112,7 +111,7 @@ public class PsbImporter : ScriptedImporter
 
                 go.transform.position = pos;
 
-                ctx.AddObjectToAsset("sprite", go);
+                ctx.AddObjectToAsset(go.name, go);
             }
 
             //如果有子物体，递归创建下去
